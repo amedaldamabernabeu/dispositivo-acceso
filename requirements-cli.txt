@@ -1,0 +1,4 @@
+# Solo para probar la API desde consola (probar_sgaccuv_cli.py + sgaccuv_api.py).
+# No incluye PyQt, OpenCV ni face_recognition.
+
+requests>=2.31.0

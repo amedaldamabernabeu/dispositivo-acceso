@@ -1,0 +1,13 @@
+# Dependencias del cliente JetsonFinal.py (Python 3).
+# En Jetson/Linux suele instalarse con: pip install -r requirements-dispositivo.txt
+# En Windows, face_recognition + dlib a menudo requieren conda-forge o WSL2.
+# Para solo probar HTTP desde consola: pip install -r requirements-cli.txt
+
+opencv-python-headless>=4.8.0
+numpy>=1.24.0
+requests>=2.31.0
+# pygame: opcional en tiempo de ejecución; sin él la app arranca pero sin sonidos MP3.
+pygame>=2.5.0
+PyQt5>=5.15.0
+pyserial>=3.5
+face_recognition>=1.3.0

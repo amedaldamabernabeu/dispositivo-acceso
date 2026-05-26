@@ -41,19 +41,24 @@ class ConfigSgaccuv:
 
 def cargar_config_sgaccuv() -> ConfigSgaccuv:
     return ConfigSgaccuv(
-        base_url=env_str("SGACCUV_BASE_URL", "http://localhost:3001").rstrip("/"),
+        base_url=env_str("SGACCUV_BASE_URL", "http://api-accesocuvalles.dokploy.devspartans.com").rstrip("/"),
         device_token=env_str(
             "SGACCUV_DEVICE_TOKEN",
-            "fa342b6844328eaea6e5cd6e98da8e16496f995d3a4b525c5ac4450b809eafe6",
+            "5cb4e4801b10204db46ff28f5e46aade5211a81cc68299e50e915a8f6cb61221",
         ),
         tipo_ingreso_rfid=env_int("SGACCUV_TIPO_INGRESO_RFID", 2),
         tipo_ingreso_teclado=env_int("SGACCUV_TIPO_INGRESO_TECLADO", 5),
-        dispositivo_id=env_int("SGACCUV_DISPOSITIVO_ID", 11),
+        dispositivo_id=env_int("SGACCUV_DISPOSITIVO_ID", 13),
     )
 
 
 def cabeceras_bearer(device_token: str) -> dict[str, str]:
     return {"Authorization": f"Bearer {device_token}"}
+
+
+def respuesta_registro_exitosa(payload: object) -> bool:
+    """POST entrada / PATCH salida: éxito solo si el JSON trae success === true."""
+    return isinstance(payload, dict) and payload.get("success") is True
 
 
 def validar_codigo_http(
@@ -102,7 +107,7 @@ def registrar_entrada_http(
             timeout=timeout,
         )
         payload = respuesta.json() if respuesta.content else {}
-        ok = respuesta.status_code == 200 and payload.get("success") is True
+        ok = respuesta_registro_exitosa(payload)
         return respuesta, ok
     except (requests.exceptions.RequestException, ValueError) as e:
         print("Error entrada SGACCUV:", e)
@@ -126,7 +131,7 @@ def registrar_salida_http(
             timeout=timeout,
         )
         payload = respuesta.json() if respuesta.content else {}
-        ok = respuesta.status_code == 200 and payload.get("success") is True
+        ok = respuesta_registro_exitosa(payload)
         return respuesta, ok
     except (requests.exceptions.RequestException, ValueError, TypeError) as e:
         print("Error salida SGACCUV:", e)
